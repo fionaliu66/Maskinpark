@@ -27,6 +27,7 @@ namespace Maskinpark.Components.Pages
 		private void ChangeStatusState(Machine machine)
 		{
 			machine.Status = machine.Status == MachineStatus.Online? MachineStatus.Offline : MachineStatus.Online;
+			MockDataService.lastModified = machine.MachineName;
 		}
 
 	}

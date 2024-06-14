@@ -2,6 +2,8 @@
 @using System.Collections.Generic
 @using Maskinpark.Services
 @using Maskinpark.Models
+@using System.Threading.Tasks
+@inject MockDataService MockDataService
 @rendermode InteractiveServer
 <PageTitle>Dashboard</PageTitle>
 
@@ -18,14 +20,16 @@
                 <div class="card-body">
                     <p class="card-text">Total Machines: @TotalMachines</p>
                     <p class="card-text">Running Machines: @RunningMachines</p>
-                    <p class="card-text">Last Modified: @LastModified.ToString()</p>
+                    <p class="card-text">Last Modified: @LastModified</p>
                 </div>
             </div>
         </div>
         <div class="col-md-8">
             <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Machine Details</h5>
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title">Machine List</h5>
+                </div>
+                <div class="card-body">                
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -56,15 +60,14 @@
     private int RunningMachines;
     private string LastModified;
     private List<Machine> Machines;
-    [Inject]
-    private MockDataService MockDataService{ get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
         Machines = await MockDataService.GetMachinesAsync();
         TotalMachines = Machines.Count;
         RunningMachines = Machines.Count(m => m.Status == MachineStatus.Online);
-        LastModified = MockDataService.lastModified??="None";
+        LastModified = MockDataService.lastModified ?? "None";
     }
 
 }

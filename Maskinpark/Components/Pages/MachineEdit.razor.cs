@@ -24,9 +24,9 @@ namespace Maskinpark.Components.Pages
              Machine = await MockDataService.GetMachineAsync(Id);
         }
 
-        protected async Task HandleValidSubmit()
+        protected  void HandleValidSubmit()
 		{
-            Machine = await MockDataService.GetMachineAsync(Id);
+           MockDataService.UpdateMachineAsync(Machine);
             StatusClass = "alert-success";
             Message = "Machine updated successfully.";
             IsSaved = true;

@@ -8,7 +8,7 @@ namespace Maskinpark.Services
         private readonly List<Machine> _machines;
         private readonly Random _random = new Random();
         private int count = 5;
-        public string? lastModified = string.Empty;
+        public string? lastModified = "None";
         public MockDataService()
         {
             _machines = new List<Machine>
