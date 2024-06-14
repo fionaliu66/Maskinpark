@@ -17,17 +17,20 @@ namespace Maskinpark.Components.Pages
 		public NavigationManager NavigationManager { get; set; }
 		protected bool IsSaved;
 		protected string Message = string.Empty;
-		protected string StatusClass = string.Empty;
+        protected string StatusClass = string.Empty;
 
         protected override async Task OnInitializedAsync()
         {
-			Machine = await MockDataService.GetMachineAsync(Id);
+             Machine = await MockDataService.GetMachineAsync(Id);
         }
 
         protected async Task HandleValidSubmit()
 		{
-		
-		}
+            Machine = await MockDataService.GetMachineAsync(Id);
+            StatusClass = "alert-success";
+            Message = "Machine updated successfully.";
+            IsSaved = true;
+        }
 
 		protected void HandleInvalidSubmit()
 		{
@@ -37,7 +40,14 @@ namespace Maskinpark.Components.Pages
 		}
 		protected void NavigateToOverview()
 		{
-			NavigationManager.NavigateTo("/employeeoverview");
+			NavigationManager.NavigateTo("/machineoverview");
 		}
+		protected async Task DeleteMachine()
+		{
+			await MockDataService.RemoveMachineAsync(Machine.MachineId);
+            StatusClass = "alert-success";
+            Message = "Deleted successfully";
+            IsSaved = true;
+        } 
 	}
 }

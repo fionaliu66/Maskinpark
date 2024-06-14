@@ -1,15 +1,8 @@
-﻿@page "/machineadd"
+﻿@using Microsoft.AspNetCore.Components.Forms
 @using Maskinpark.Models
-<h3>MachineAdd</h3>
-<PageTitle>@Title</PageTitle>
-@rendermode InteractiveServer
 
 
-@*<MachinEditForm doesn't work'>*@
-
-@if (!IsSaved)
-{
-    <EditForm Enhance Model="@Machine" OnValidSubmit="HandleValidSubmit" FormName="AddMachineForm" OnInvalidSubmit="HandleInvalidSubmit">
+    <EditForm Enhance Model="@Machine" OnValidSubmit="HandleValidSubmit" FormName="EditMachineForm" OnInvalidSubmit="HandleInvalidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -17,7 +10,7 @@
             <div class="row mb-3">
                 <label for="machineName" class="col-form-label col-md-2">Machine Name: </label>
                 <div class="col-md-4">
-                    <InputText id="machineName" class="form-control col-md-4" @bind-Value="@Machine.MachineName" placeholder="Enter Machine name"></InputText>
+                    <InputText id="machineName" name="machineName" class="form-control col-md-4" @bind-Value="Machine.MachineName" placeholder="Enter Machine name"></InputText>
                 </div>
                 <ValidationMessage class="offset-md-4 col-md-4" For="@(() => Machine.MachineName)" />
             </div>
@@ -25,12 +18,12 @@
             <div class="row mb-3">
                 <label for="status" class="col-form-label col-md-2">Status</label>
                 <div class="col-md-4">
-                    <InputRadioGroup @bind-Value="Machine.Status">
+                    <InputRadioGroup @bind-Value="Machine.Status" Name="status">
                         @foreach (MachineStatus status in Enum.GetValues(typeof(MachineStatus)))
                         {
                             <div class="form-check">
-                                <InputRadio class="form-check-input" id="@status.ToString()" Value="status" />
-                                <label class="form-check-label" for="@status.ToString()">@status</label>
+                                <InputRadio class="form-check-input" id="status_@status.ToString()" name="status" Value="status" />
+                                <label class="form-check-label" for="status_@status.ToString()">@status</label>
                             </div>
                         }
                     </InputRadioGroup>
@@ -40,7 +33,7 @@
             <div class="row mb-3">
                 <label for="temperature" class="col-form-label col-md-2">Temperature</label>
                 <div class="col-md-4">
-                    <InputNumber id="temperature" class="form-control col-md-4" @bind-Value="Machine.Temperature" />
+                    <InputNumber id="temperature" name="temperature" class="form-control col-md-4" @bind-Value="Machine.Temperature" />
                 </div>
                 <ValidationMessage class="offset-md-4 col-md-4" For="@(() => Machine.Temperature)" />
             </div>
@@ -48,7 +41,7 @@
             <div class="row mb-3">
                 <label for="pressure" class="col-form-label col-md-2">Pressure</label>
                 <div class="col-md-4">
-                    <InputNumber id="pressure" class="form-control col-md-4" @bind-Value="Machine.Pressure" />
+                    <InputNumber id="pressure" name="pressure" class="form-control col-md-4" @bind-Value="Machine.Pressure" />
                 </div>
                 <ValidationMessage class="offset-md-4 col-md-4" For="@(() => Machine.Pressure)" />
             </div>
@@ -56,7 +49,7 @@
             <div class="row mb-3">
                 <label for="vibration" class="col-form-label col-md-2">Vibration</label>
                 <div class="col-md-4">
-                    <InputNumber id="vibration" class="form-control col-md-4" @bind-Value="Machine.Vibration" />
+                    <InputNumber id="vibration" name="vibration" class="form-control col-md-4" @bind-Value="Machine.Vibration" />
                 </div>
                 <ValidationMessage class="offset-md-4 col-md-4" For="@(() => Machine.Vibration)" />
             </div>
@@ -65,9 +58,39 @@
             <button type="button" class="btn btn-light" @onclick="@NavigateToOverview">Cancel</button>
         </div>
     </EditForm>
-}
-else
-{
-    <h4 class="text-success">@Message</h4>
-    <button type="button" class="btn btn-light" @onclick="@NavigateToOverview">Back to Overview</button>
+
+
+
+
+
+@code {
+    [Parameter]
+    public Machine Machine { get; set; }
+
+    [Parameter]
+    public EventCallback<Machine> OnValidSubmit { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        if (OnValidSubmit.HasDelegate)
+        {
+            await OnValidSubmit.InvokeAsync(Machine);
+        }
+    }
+    private void  HandleInvalidSubmit()
+    {
+        Message = "There are some validation errors. Please try again.";
+    }
+    private void NavigateToOverview()
+    {
+        NavigationManager.NavigateTo("/machineoverview");
+    }
+    [Parameter]
+    public bool IsSaved { get; set; }
+
+    [Parameter]
+    public string Message { get; set; } = "Operation completed successfully.";
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
 }

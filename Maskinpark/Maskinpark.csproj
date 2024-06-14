@@ -8,22 +8,37 @@
 
   <ItemGroup>
     <Content Remove="Components\MachineEdit.razor" />
+    <Content Remove="Components\MachineEditForm.razor" />
+    <Content Remove="Components\MachineForm.razor" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.6" />
     <PackageReference Include="Moq" Version="4.20.70" />
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Components\MachineEdit.razor" />
+    <_ContentIncludedByDefault Remove="Components\MachineEditForm.razor" />
+    <_ContentIncludedByDefault Remove="Components\MachineForm.razor" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Components\MachineEditForm.razor" />
+    <None Include="Components\MachineForm.razor" />
     <None Include="Components\Pages\MachineEdit.razor" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Components\MachineEdit.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\MachineEditForm.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\MachineForm.razor" />
   </ItemGroup>
 
 </Project>
