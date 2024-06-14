@@ -1,6 +1,69 @@
 ﻿@page "/machineedit/{Id:int}"
-<h3>Edit and Delete</h3>
+@using Maskinpark.Models
 @rendermode InteractiveServer
-@code {
 
+@if (!IsSaved)
+{
+	<div class="container">
+		<EditForm Enhance Model="@Machine" OnValidSubmit="HandleValidSubmit" FormName="EditMachineForm" OnInvalidSubmit="HandleInvalidSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+
+            <div class="container">
+                <div class="row mb-3">
+                    <label for="machineName" class="col-form-label col-md-2">Machine Name: </label>
+                    <div class="col-md-4">
+                        <InputText id="machineName" class="form-control col-md-4" @bind-Value="@Machine.MachineName" placeholder="Enter Machine name"></InputText>
+                    </div>
+                    <ValidationMessage class="offset-md-4 col-md-4" For="@(() => Machine.MachineName)" />
+                </div>
+
+                <div class="row mb-3">
+                    <label for="status" class="col-form-label col-md-2">Status</label>
+                    <div class="col-md-4">
+                        <InputRadioGroup @bind-Value="Machine.Status">
+                            @foreach (MachineStatus status in Enum.GetValues(typeof(MachineStatus)))
+                            {
+                                <div class="form-check">
+                                    <InputRadio class="form-check-input" id="@status.ToString()" Value="status" />
+                                    <label class="form-check-label" for="@status.ToString()">@status</label>
+                                </div>
+                            }
+                        </InputRadioGroup>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="temperature" class="col-form-label col-md-2">Temperature</label>
+                    <div class="col-md-4">
+                        <InputNumber id="temperature" class="form-control col-md-4" @bind-Value="Machine.Temperature" />
+                    </div>
+                    <ValidationMessage class="offset-md-4 col-md-4" For="@(() => Machine.Temperature)" />
+                </div>
+
+                <div class="row mb-3">
+                    <label for="pressure" class="col-form-label col-md-2">Pressure</label>
+                    <div class="col-md-4">
+                        <InputNumber id="pressure" class="form-control col-md-4" @bind-Value="Machine.Pressure" />
+                    </div>
+                    <ValidationMessage class="offset-md-4 col-md-4" For="@(() => Machine.Pressure)" />
+                </div>
+
+                <div class="row mb-3">
+                    <label for="vibration" class="col-form-label col-md-2">Vibration</label>
+                    <div class="col-md-4">
+                        <InputNumber id="vibration" class="form-control col-md-4" @bind-Value="Machine.Vibration" />
+                    </div>
+                    <ValidationMessage class="offset-md-4 col-md-4" For="@(() => Machine.Vibration)" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-light" @onclick="@NavigateToOverview">Cancel</button>
+            </div>
+		</EditForm>
+	</div>
+}
+else
+{
+	
 }

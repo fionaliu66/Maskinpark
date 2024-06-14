@@ -22,12 +22,15 @@
             <div class="row mb-3">
                 <label for="status" class="col-form-label col-md-2">Status</label>
                 <div class="col-md-4">
-                    <InputSelect id="status" class="form-control col-md-4" @bind-Value="Machine.Status">
-                        @foreach (var status in Enum.GetValues(typeof(MachineStatus)))
+                    <InputRadioGroup @bind-Value="Machine.Status">
+                        @foreach (MachineStatus status in Enum.GetValues(typeof(MachineStatus)))
                         {
-                            <option value="@status">@status</option>
+                            <div class="form-check">
+                                <InputRadio class="form-check-input" id="@status.ToString()" Value="status" />
+                                <label class="form-check-label" for="@status.ToString()">@status</label>
+                            </div>
                         }
-                    </InputSelect>
+                    </InputRadioGroup>
                 </div>
             </div>
 
@@ -57,8 +60,7 @@
 
             <button type="submit" class="btn btn-primary">Add Machine</button>
             <button type="submit" class="btn btn-light" @onclick="@NavigateToOverview">Cancel</button>
-        </div>
-       
+        </div>     
 	</EditForm>
 }
 else
