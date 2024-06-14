@@ -1,7 +1,70 @@
 ﻿@page "/"
+@using System.Collections.Generic
+@using Maskinpark.Services
+@using Maskinpark.Models
+@rendermode InteractiveServer
+<PageTitle>Dashboard</PageTitle>
 
-<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@* <PieChart RunningMachines="4" ShutdownMachines="6" /> *@
+<h2 class="text-center">Dashboard</h2>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title">Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Total Machines: @TotalMachines</p>
+                    <p class="card-text">Running Machines: @RunningMachines</p>
+                    <p class="card-text">Last Modified: @LastModified.ToString()</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Machine Details</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Machine Name</th>
+                                <th>Status</th>
+                                <th>Temperature</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var machine in Machines)
+                            {
+                                <tr>
+                                    <td>@machine.MachineName</td>
+                                    <td>@machine.Status</td>
+                                    <td>@machine.Temperature.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-Welcome to your new app.
+@code{
+    private int TotalMachines;
+    private int RunningMachines;
+    private string LastModified;
+    private List<Machine> Machines;
+    [Inject]
+    private MockDataService MockDataService{ get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Machines = await MockDataService.GetMachinesAsync();
+        TotalMachines = Machines.Count;
+        RunningMachines = Machines.Count(m => m.Status == MachineStatus.Online);
+        LastModified = MockDataService.lastModified??="None";
+    }
+
+}

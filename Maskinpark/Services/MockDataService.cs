@@ -8,7 +8,7 @@ namespace Maskinpark.Services
         private readonly List<Machine> _machines;
         private readonly Random _random = new Random();
         private int count = 5;
-
+        public string? lastModified = string.Empty;
         public MockDataService()
         {
             _machines = new List<Machine>
@@ -102,6 +102,11 @@ namespace Maskinpark.Services
                 machine.Pressure = updatedMachine.Pressure;
                 machine.Vibration = updatedMachine.Vibration;
             }
+            if (machine != null)
+            {
+                lastModified = machine.MachineName;
+            }
+           
             return Task.CompletedTask;
         }
     }
